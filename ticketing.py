@@ -10,7 +10,8 @@ import time
 import datetime
 
 # TODO : 더 세세한 모듈화 및 전체적인 refactoring 필요
-#       팝업 확인버튼, 팝업 이동해서 캡차 인식후 입력, 자리선정, 결제까지
+#       팝업 확인버튼, 팝업 이동해서 캡차 인식후 입력, 자리선정, 결제까지 - 접근 불가
+#       인터파크 추가
 load_dotenv()
 
 # 크롬 옵션 설정
@@ -19,7 +20,6 @@ options.add_argument(f"user-data-dir=C:\\Users\\{os.getenv('OS_USER_PROFILE')}\\
 options.add_argument("profile-directory=Default")
 # TODO : 불필요 옵션 제거 필요
 options.add_argument("--disable-infobars")  # 자동화 메시지 제거
-# options.add_argument("--headless")          # UI 없이 백그라운드에서 실행
 options.add_argument("--no-sandbox")        # 보안 샌드박스 비활성화
 options.add_argument("--disable-extensions")  # 확장 프로그램 비활성화
 options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36')  # 일반적인 User-Agent 사용
@@ -92,14 +92,25 @@ def navigate_to_ticket_page(driver):
 
 def select_date(driver):
     try:
+        xpath = f'//*[@id="reservation"]/div[2]/ul/li[{os.getenv("MATCH_INDEX")}]/div[3]'
+        print(xpath)
         element = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="reservation"]/div[2]/ul/li[6]/div[3]'))# TODO :수정 필요
+            EC.element_to_be_clickable((By.XPATH, f'//*[@id="reservation"]/div[2]/ul/li[{os.getenv("MATCH_INDEX")}]/div[3]'))# TODO :수정 필요
         )
+        # //*[@id="reservation"]/div[2]/ul/li[1]/div[3]
         # 클릭
         element.click()
 
     except Exception as e:
-        print(f"오류 발생: {e}")
+        print(f"예매버튼 클릭 오류 발생: {e}")
+    finally:
+        try:
+            confirm = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[2]/div[2]/div[3]/button'))
+            )
+            confirm.click()
+        except Exception as e:
+            print(f"예매버튼 확인 클릭 오류 발생: {e}")
 
 
 def wait_until_target_time_and_refresh(driver, target_hour, target_minute, target_second):
@@ -126,8 +137,12 @@ def main():
     try:
         login_to_payco(driver)  # PAYCO 로그인
         navigate_to_ticket_page(driver)  # 티켓 페이지로 이동
-        # select_date(driver)
-        wait_until_target_time_and_refresh(driver, 10, 59, 59) # 목표 시간까지 대기/페이지 새로고침/예매버튼 클릭
+        test_mode = os.getenv("TEST_MODE")
+        if test_mode == 'Y':
+            select_date(driver)
+        else :
+            wait_until_target_time_and_refresh(driver, 17, 8, 59) # 목표 시간까지 대기/페이지 새로고침/예매버튼 클릭
+
         # TODO : 시간은 main함수에 입력하도록 수정
     except Exception as e:
         print(f"오류 발생: {e}")
