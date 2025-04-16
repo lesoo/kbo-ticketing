@@ -2,7 +2,7 @@ import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import module.module as md
+import module.common as cm
 
 def login_to_payco(driver):
     # PAYCO 로그인 페이지로 이동
@@ -33,7 +33,7 @@ def login_to_payco(driver):
 
 
 def navigate_to_ticket_page(driver):
-    team_link = md.match_team(os.getenv("HOME_TEAM"))
+    team_link = cm.match_team(os.getenv("HOME_TEAM"))
     ticket_page_url = f"https://www.ticketlink.co.kr/sports/137/{team_link}"
 
     driver.get(ticket_page_url)

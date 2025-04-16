@@ -1,6 +1,17 @@
 import time
 import datetime
 
+def get_booking_site(home_team):
+    match home_team:
+        case "SAMSUNG" | "LG" | "KIA" | "KT" | "SSG" | "HANHWA":
+            return "ticket_link"
+        case "DOOSAN" | "KIWOOM":
+            return "interpark"
+        case "LOTTE":
+            return "lotte"
+        case _:
+            return "-1"# unknown team
+
 def match_team(home_team):
     match home_team:
         case "SAMSUNG":
