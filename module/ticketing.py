@@ -42,6 +42,24 @@ def ticketing_with_ticket_link():
         input("창을 닫으려면 엔터 키를 누르세요...")
         driver.quit()
 
+def ticketing_with_interpark():
+    driver = setup_driver()
+    try:
+        mp.move_to_interpark(driver)  # PAYCO 로그인
+        mp.navigate_to_interpark_ticket_page(driver)  # 티켓 페이지로 이동
+
+        test_mode = os.getenv("TEST_MODE")
+        if test_mode == 'Y':
+            mp.select_date_interpark(driver)
+        else :
+            cm.wait_until_target_time_and_refresh(driver, mp.select_date_interpark, int(os.getenv("MINUTE")), int(os.getenv("SECOND"))) # 목표 시간까지 대기/페이지 새로고침/예매버튼 클릭
+
+    except Exception as e:
+        print(f"오류 발생: {e}")
+    finally:
+        input("창을 닫으려면 엔터 키를 누르세요...")
+        driver.quit()
+
 
 # if __name__ == "__main__":
 #     main()

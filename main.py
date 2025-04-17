@@ -12,7 +12,7 @@ def main():
             tk.ticketing_with_ticket_link()
         case "interpark":
             try:
-                print("인터파크 실행")
+                tk.ticketing_with_interpark()
             except Exception as e:
                 print(f"오류 : {e}")
 

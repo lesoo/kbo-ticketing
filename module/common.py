@@ -26,6 +26,10 @@ def match_team(home_team):
             return "476"
         case "HANHWA":
             return "63"
+        case "DOOSAN":
+            return "PB004"
+        case "KIWOOM":
+            return "PB003"
 
 
 def wait_until_target_time_and_refresh(driver, function, target_minute, target_second):
