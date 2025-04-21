@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 
 import module.common as cm
 import module.move_page as mp
+import module.captcha as cc
 
 # TODO : 팝업 이동해서 캡차 인식후 입력, 자리선정, 결제까지 - 접근 불가
 #       인터파크 추가
@@ -53,6 +54,10 @@ def ticketing_with_interpark():
             mp.select_date_interpark(driver)
         else :
             cm.wait_until_target_time_and_refresh(driver, mp.select_date_interpark, int(os.getenv("MINUTE")), int(os.getenv("SECOND"))) # 목표 시간까지 대기/페이지 새로고침/예매버튼 클릭
+
+        cc.pass_captcha(driver)
+        # cc.get_image(driver)
+
 
     except Exception as e:
         print(f"오류 발생: {e}")
