@@ -8,7 +8,7 @@ import module.ticketing as tk
 def main():
     booking_site = cm.get_booking_site(os.getenv("HOME_TEAM"))
     match(booking_site):
-        case "ticket_link": # TODO : 아래 내용 function으로 만들기
+        case "ticket_link":
             tk.ticketing_with_ticket_link()
         case "interpark":
             try:

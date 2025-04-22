@@ -100,7 +100,6 @@ def select_date_interpark(driver):
     try:
         # TODO : 경기 날짜로 선택하도록 수정
         xpath = f'//*[@id="contents"]/div[6]/div[{os.getenv("MATCH_INDEX")}]/div[3]/a'
-        print(xpath)
 
         element = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, xpath))
